@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dongruan.mapper.Studentmapper">
+<!--     List<Student> selectbymyname(@Param("name") String name);-->
+    <select id="selectbymyname" resultType="com.example.dongruan.entity.Student">
+        select * from student where name like "%"#{name}"%"
+    </select>
+
+<!--Integer gettotal();-->
+    <select id="gettotal" resultType="integer">
+        select count(*) from student
+    </select>
+
+
+<!--    List<Student> findpage(Integer pagenum,Integer pagesize);-->
+    <select id="findpage" resultType="com.example.dongruan.entity.Student">
+        select * from student limit #{pagenum}, #{pagesize}
+    </select>
+
+<!--    List<Student> findstudentclass();-->
+
+    <resultMap id="student_class" type="com.example.dongruan.entity.Student">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="age" column="age"></result>
+        <result property="number" column="number"></result>
+        <result property="address" column="address"></result>
+<!--        <result property="classid" column="class_id"></result>-->
+        <association property="myclassentity" javaType="com.example.dongruan.entity.Class">
+            <id property="id" column="id"></id>
+            <result property="className" column="class_name"></result>
+            <result property="classPeople" column="class_people"></result>
+        </association>
+    </resultMap>
+    <select id="findstudentclass" resultMap="student_class">
+    select student.*,class.class_name,class.class_people from student left join  class on student.class_id=class.id
+    </select>
+
+
+<!--    List<Student> selectstudentbyclass(@Param("classid") String classid);-->
+    <resultMap id="class_student" type="com.example.dongruan.entity.Class">
+        <id property="id" column="id"></id>
+        <result property="className" column="class_name"></result>
+        <result property="classPeople" column="class_people"></result>
+        <collection property="students" ofType="Student">
+            <result property="id" column="id"></result>
+            <result property="name" column="name"></result>
+            <result property="age" column="age"></result>
+            <result property="number" column="number"></result>
+            <result property="address" column="address"></result>
+        </collection>
+    </resultMap>
+    <select id="selectstudentbyclass" resultMap="class_student">
+        SELECT * FROM class LEFT JOIN student ON class.id=student.class_id WHERE class.id=#{classid}
+    </select>
+
+
+
+<!--    List<Course> selectstudentcourse();-->
+    <resultMap id="student_course" type="student">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="age" column="age"></result>
+        <result property="number" column="number"></result>
+        <result property="address" column="address"></result>
+        <collection property="courses" ofType="course">
+            <result property="id" column="id"></result>
+            <result property="course" column="course"></result>
+            <result property="courseTeacher" column="course_teacher"></result>
+        </collection>
+
+            </resultMap>
+            <select id="selectstudentcourse" resultMap="student_course">
+                SELECT * FROM student LEFT JOIN student_course ON student.id=student_course.student_id LEFT JOIN course ON course.id=student_course.course_id
+            </select>
+        </mapper>
