@@ -28,4 +28,5 @@ public interface Studentmapper extends BaseMapper<Student> {
 
     //多对多
     List<Student> selectstudentcourse();
+
 }

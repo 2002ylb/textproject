@@ -36,11 +36,11 @@ private Usermapper usermapper;
 
             userDTO.setToken(token);
 
-//            // 获取当前的 HttpSession
-//            HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
-//
-//            // 将 token 存储到 session 中
-//            session.setAttribute("token", token);
+            // 获取当前的 HttpSession
+            HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+
+            // 将 token 存储到 session 中
+            session.setAttribute("token", token);
 
             return new Result(userDTO,200,"登录成功");
         }else{
